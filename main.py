@@ -1,0 +1,91 @@
+import yfinance as yf # use yfinance to retrieve historical stock data
+import pandas as pd   # table of data 
+
+tickers = ["AAPL", "MSFT", "JPM", "JNJ", "NVDA"]    # 5 stock companies
+
+# Get historical market data for these five stocks starting January 1, 2021.
+data = yf.download(
+    tickers,
+    start="2021-01-01",
+    auto_adjust=True
+)
+
+# extracts the closing-price data
+prices = data["Close"]
+
+# Show the last 5 rows
+print(prices.tail())
+
+# Calculate daily return for financial analysis
+# prices.pct_change(): for each stock, pandas essentially calculates: Rt = (Pt - P(t-1)) / P(t-1)
+# .dropna(): removes the first row because the first price doesn't have a previous day's price to compare against.
+daily_returns = prices.pct_change().dropna()
+
+print("\nDaily Returns:")
+
+# daily return over the last 5 days.
+print(daily_returns.tail())
+
+# average across all daily returns since 2021
+print(daily_returns.mean())
+average_daily_return = daily_returns.mean()
+
+# Annualize the return 
+# There are approximately 252 trading days per year.
+# Annualized return = Average daily return x 252
+annual_returns = average_daily_return * 252
+print("\nAnnualized Returns:")
+print(annual_returns)
+
+# VOLATILITY
+# Return tells us how much the investment earned.
+# Volatility tells us how much those returns move around.
+# use .std() to calculate deviation
+daily_volatility = daily_returns.std()
+# Annualize daily volatility
+annual_volatility = daily_volatility * (252 ** 0.5)
+# Print
+print("\nAnnualized Volatility:")
+print(annual_volatility)
+
+# Sharpe ratio
+# How much excess return am I getting for the risk I'm taking?
+# Sharpe = (Annualized Return - Risk Free Rate) / Annualized Volatility
+# Assume risk free rate is 4%
+risk_free_rate = 0.04
+sharpe_ratio = (annual_returns - risk_free_rate) / annual_volatility
+print("\nSharpe Ratios:")
+print(sharpe_ratio)
+
+# Peak price
+# The returns are compounded day by day
+cumulative_returns = (1 + daily_returns).cumprod()
+running_peak = cumulative_returns.cummax()
+
+# Drawdown
+drawdown = (cumulative_returns - running_peak) / running_peak
+print("\ndrawdown:")
+print(drawdown)
+
+# Maximum Drawdown
+max_drawdown = drawdown.min()
+print("\nMaximum Drawdown:")
+print(max_drawdown)
+
+# From the data, NVDA had the strongest return in your sample, but it also experienced the deepest historical decline.
+# For example:
+#   - NVDA annualized return: about 62.8%
+#   - NVDA annualized volatility: about 50.6%
+#   - NVDA max drawdown: about -66.3%
+#   - NVDA Sharpe ratio: about 1.16
+# So someone looking only at return would miss a huge part of the story.
+
+
+# CORRELATION
+# Correlation tells us how two stocks tend to move relative to each other.
+# Correlation near +1 → tend to move in the same direction
+# Correlation near 0 → weak relationship
+# Correlation near -1 → tend to move in opposite directions
+correlation_matrix = daily_returns.corr()  # Correlation func
+print("\nCorrelation matrix:")
+print(correlation_matrix)
