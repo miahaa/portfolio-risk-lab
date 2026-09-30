@@ -1,5 +1,6 @@
 import yfinance as yf # use yfinance to retrieve historical stock data
 import pandas as pd   # table of data 
+import matplotlib.pyplot as plt   
 
 tickers = ["AAPL", "MSFT", "JPM", "JNJ", "NVDA"]    # 5 stock companies
 
@@ -89,3 +90,33 @@ print(max_drawdown)
 correlation_matrix = daily_returns.corr()  # Correlation func
 print("\nCorrelation matrix:")
 print(correlation_matrix)
+
+# Correlation heatmap
+fig, ax = plt.subplots(figsize=(8, 6))
+
+heatmap = ax.imshow(correlation_matrix)
+
+ax.set_xticks(range(len(tickers)))
+ax.set_yticks(range(len(tickers)))
+
+ax.set_xticklabels(tickers)
+ax.set_yticklabels(tickers)
+
+plt.title("Stock Return Correlation Matrix")
+plt.colorbar(heatmap)
+
+# Label each square, loop through the matrix 
+for i in range(len(tickers)):
+    for j in range(len(tickers)):
+        value = correlation_matrix.iloc[i, j]
+
+        ax.text(
+            j,
+            i,
+            f"{value:.2f}",       # Display the number using two decimal places.
+            ha="center",
+            va="center"
+        )
+
+plt.savefig("images/correlation_matrix.png", dpi=300, bbox_inches="tight")
+plt.show()
