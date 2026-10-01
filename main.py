@@ -317,3 +317,34 @@ portfolio had stronger risk-adjusted performance under this model.
 print("\nRISK-ADJUSTED PERFORMANCE")
 print(f"Portfolio Sharpe Ratio: {portfolio_sharpe:.2f}")
 print(f"S&P 500 Sharpe Ratio: {benchmark_sharpe:.2f}")
+
+
+'''
+Beta: How sensitive is your portfolio to movements in the overall stock market?
+Beta = 1.00 → tends to move with the market
+Beta > 1.00 → more sensitive to market movements
+Beta < 1.00 → less sensitive to market movements
+Beta < 0    → tends to move opposite the market
+'''
+# Align portfolio and benchmark returns by date
+comparison_data = pd.concat(
+    [
+        portfolio_daily_returns.rename("Portfolio"),
+        benchmark_daily_returns["^GSPC"].rename("Market")
+    ],
+    axis=1
+).dropna()
+
+# print("\nAligned Portfolio and Market Returns:")
+# print(comparison_data.tail())
+
+# Calculate portfolio beta relative to the S&P 500
+covariance_with_market = comparison_data["Portfolio"].cov(
+    comparison_data["Market"]
+)
+
+market_variance = comparison_data["Market"].var()
+
+portfolio_beta = covariance_with_market / market_variance
+
+print(f"\nPortfolio Beta: {portfolio_beta:.2f}")
