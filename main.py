@@ -66,7 +66,7 @@ running_peak = cumulative_returns.cummax()
 
 # Drawdown
 drawdown = (cumulative_returns - running_peak) / running_peak
-print("\ndrawdown:")
+# print("\ndrawdown:")
 # print(drawdown)
 
 # Maximum Drawdown
@@ -142,3 +142,23 @@ portfolio_return = sum(weights * annual_returns)
 print("\nPortfolio Annualized Return:")
 print(portfolio_return)
 print(f"Portfolio Annualized Return: {portfolio_return:.2%}")
+
+# Portfolio volatility
+covariance_matrix = daily_returns.cov() * 252
+
+print("\nAnnualized Covariance Matrix:")
+print(covariance_matrix)
+
+# Calculate portfolio variance
+portfolio_variance = weights.T @ covariance_matrix @ weights
+
+portfolio_volatility = np.sqrt(portfolio_variance)
+
+print(f"\nPortfolio Annualized Volatility: {portfolio_volatility:.2%}")
+
+'''
+Portfolio volatility is 20.29%, while the portfolio's expected annualized return is 27.80%.
+=> Clear demonstration of diversification: several individual stocks have much higher volatility, such as NVDA at 50.63%, 
+but combining assets whose returns aren't perfectly correlated brings the portfolio volatility down.
+'''
+
