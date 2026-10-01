@@ -162,3 +162,7 @@ Portfolio volatility is 20.29%, while the portfolio's expected annualized return
 but combining assets whose returns aren't perfectly correlated brings the portfolio volatility down.
 '''
 
+# Portfolio Sharpe Ratio
+# Use the same formula as for Sharpe
+portfolio_sharpe = (portfolio_return - risk_free_rate) / portfolio_volatility
+print(f"Portfolio Sharpe Ratio: {portfolio_sharpe:.2f}")
