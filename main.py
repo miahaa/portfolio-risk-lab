@@ -211,9 +211,40 @@ ax.grid(True, alpha=0.3)
 
 plt.tight_layout()
 # plt.savefig("images/correlation_matrix.png", dpi=300, bbox_inches="tight")
+# plt.savefig(
+#     "images/portfolio_growth.png",
+#     dpi=300,
+#     bbox_inches="tight"
+# )
+# plt.show()
+
+# Calculate portfolio maximum drawdown
+portfolio_running_peak = portfolio_cumulative.cummax()
+
+portfolio_drawdown = (
+    portfolio_cumulative - portfolio_running_peak
+) / portfolio_running_peak
+
+portfolio_max_drawdown = portfolio_drawdown.min()
+
+print(f"\nPortfolio Maximum Drawdown: {portfolio_max_drawdown:.2%}")
+
+# Draw chart 
+fig, ax = plt.subplots(figsize=(10, 6))
+
+ax.plot(portfolio_drawdown.index, portfolio_drawdown)
+
+ax.set_title("Portfolio Drawdown")
+ax.set_xlabel("Date")
+ax.set_ylabel("Drawdown")
+ax.grid(True, alpha=0.3)
+
+plt.tight_layout()
+
 plt.savefig(
-    "images/portfolio_growth.png",
+    "images/portfolio_drawdown.png",
     dpi=300,
     bbox_inches="tight"
 )
+
 plt.show()
