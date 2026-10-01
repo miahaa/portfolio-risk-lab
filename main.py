@@ -401,9 +401,21 @@ plt.legend()
 plt.grid(alpha=0.3)
 plt.tight_layout()
 
-plt.savefig(
-    "images/portfolio_vs_sp500.png",
-    dpi=300
+# plt.savefig(
+#     "images/portfolio_vs_sp500.png",
+#     dpi=300
+# )
+
+# plt.show()
+
+final_portfolio_value = portfolio_benchmark_growth.iloc[-1]
+final_market_value = market_benchmark_growth.iloc[-1]
+
+print("\nGROWTH OF $10,000")
+print(f"Portfolio Final Value: ${final_portfolio_value:,.2f}")
+print(f"S&P 500 Final Value: ${final_market_value:,.2f}")
+print(
+    f"Difference: "
+    f"${final_portfolio_value - final_market_value:,.2f}"
 )
 
-plt.show()
