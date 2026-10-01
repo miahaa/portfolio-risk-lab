@@ -166,3 +166,15 @@ but combining assets whose returns aren't perfectly correlated brings the portfo
 # Use the same formula as for Sharpe
 portfolio_sharpe = (portfolio_return - risk_free_rate) / portfolio_volatility
 print(f"Portfolio Sharpe Ratio: {portfolio_sharpe:.2f}")
+
+# Create portfolio performance summary
+portfolio_summary = pd.Series({
+    "Annualized Return": portfolio_return,
+    "Annualized Volatility": portfolio_volatility,
+    "Sharpe Ratio": portfolio_sharpe
+})
+
+print("\nPortfolio Summary:")
+print(f"Annualized Return: {portfolio_return:.2%}")
+print(f"Annualized Volatility: {portfolio_volatility:.2%}")
+print(f"Sharpe Ratio: {portfolio_sharpe:.2f}")
