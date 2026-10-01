@@ -8,6 +8,20 @@ This project uses historical market data for **AAPL, MSFT, JPM, JNJ, and NVDA** 
 
 The current version uses an equal-weight portfolio, with 20% allocated to each stock.
 
+## Portfolio vs. S&P 500
+
+Starting with the same hypothetical **$10,000 investment**, the historical sample produced:
+
+| Investment | Final Value |
+| --- | ---: |
+| Equal-weight portfolio | $43,539.04 |
+| S&P 500 | $20,676.21 |
+| Difference | $22,862.84 |
+
+![Portfolio vs. S&P 500](images/portfolio_vs_sp500.png)
+
+This is a historical comparison over the project's sample period, not a forecast of future returns. The selected portfolio also carries more market exposure and volatility than the benchmark, so performance is evaluated with risk measures in addition to raw return.
+
 ## Analysis Included
 
 - Daily stock returns
@@ -34,10 +48,6 @@ Looking only at return can hide a large part of an investment's risk.
 This project compares return with volatility, drawdown, correlation, market sensitivity, and risk-adjusted performance. It also demonstrates how combining assets that are not perfectly correlated can reduce portfolio volatility and uses the S&P 500 as a benchmark for evaluating relative performance.
 
 ## Visualizations
-
-### Growth of $10,000
-
-![Portfolio Growth](images/portfolio_growth.png)
 
 ### Portfolio Drawdown
 
