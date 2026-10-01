@@ -12,32 +12,45 @@ data = yf.download(
     auto_adjust=True
 )
 
+# BENCHMARK
+# Use the S&P 500 as the market benchmark
+benchmark = yf.download(
+    "^GSPC",                     # ^GSPC represents the S&P 500 index.
+    start="2021-01-01",
+    auto_adjust=True
+)
+
+benchmark_prices = benchmark["Close"]   # extracts the closing-price series
+
+print("\nS&P 500 Prices:")
+print(benchmark_prices.tail())
+
 # extracts the closing-price data
 prices = data["Close"]
 
 # Show the last 5 rows
-print(prices.tail())
+# print(prices.tail())
 
 # Calculate daily return for financial analysis
 # prices.pct_change(): for each stock, pandas essentially calculates: Rt = (Pt - P(t-1)) / P(t-1)
 # .dropna(): removes the first row because the first price doesn't have a previous day's price to compare against.
 daily_returns = prices.pct_change().dropna()
 
-print("\nDaily Returns:")
+# print("\nDaily Returns:")
 
 # daily return over the last 5 days.
-print(daily_returns.tail())
+# print(daily_returns.tail())
 
 # average across all daily returns since 2021
-print(daily_returns.mean())
+# print(daily_returns.mean())
 average_daily_return = daily_returns.mean()
 
 # Annualize the return 
 # There are approximately 252 trading days per year.
 # Annualized return = Average daily return x 252
 annual_returns = average_daily_return * 252
-print("\nAnnualized Returns:")
-print(annual_returns)
+# print("\nAnnualized Returns:")
+# print(annual_returns)
 
 # VOLATILITY
 # Return tells us how much the investment earned.
@@ -56,8 +69,8 @@ annual_volatility = daily_volatility * (252 ** 0.5)
 # Assume risk free rate is 4%
 risk_free_rate = 0.04
 sharpe_ratio = (annual_returns - risk_free_rate) / annual_volatility
-print("\nSharpe Ratios:")
-print(sharpe_ratio)
+# print("\nSharpe Ratios:")
+# print(sharpe_ratio)
 
 # Peak price
 # The returns are compounded day by day
@@ -71,8 +84,8 @@ drawdown = (cumulative_returns - running_peak) / running_peak
 
 # Maximum Drawdown
 max_drawdown = drawdown.min()
-print("\nMaximum Drawdown:")
-print(max_drawdown)
+# print("\nMaximum Drawdown:")
+# print(max_drawdown)
 
 # From the data, NVDA had the strongest return in your sample, but it also experienced the deepest historical decline.
 # For example:
@@ -89,8 +102,8 @@ print(max_drawdown)
 # Correlation near 0 → weak relationship
 # Correlation near -1 → tend to move in opposite directions
 correlation_matrix = daily_returns.corr()  # Correlation func
-print("\nCorrelation matrix:")
-print(correlation_matrix)
+# print("\nCorrelation matrix:")
+# print(correlation_matrix)
 
 # # Correlation heatmap
 # fig, ax = plt.subplots(figsize=(8, 6))
@@ -146,8 +159,8 @@ portfolio_return = sum(weights * annual_returns)
 # Portfolio volatility
 covariance_matrix = daily_returns.cov() * 252
 
-print("\nAnnualized Covariance Matrix:")
-print(covariance_matrix)
+# print("\nAnnualized Covariance Matrix:")
+# print(covariance_matrix)
 
 # Calculate portfolio variance
 portfolio_variance = weights.T @ covariance_matrix @ weights
@@ -247,4 +260,9 @@ plt.savefig(
     bbox_inches="tight"
 )
 
-plt.show()
+# plt.show()
+
+'''
+S&P 500 benchmarking: Did my portfolio actually outperform the market, and was the extra return worth the extra risk?
+We'll use the S&P 500 as our market benchmark. With yfinance, its ticker is: ^GSPC
+'''
