@@ -366,3 +366,44 @@ print(f"CAPM Expected Return: {capm_expected_return:.2%}")
 portfolio_alpha = portfolio_return - capm_expected_return
 
 print(f"Jensen's Alpha: {portfolio_alpha:.2%}")
+
+'''
+If I invested $10,000 in my portfolio and $10,000 in the S&P 500 on the same date, what would each investment be worth over time?
+'''
+initial_investment = 10000
+# Calculate cumulative growth
+portfolio_benchmark_growth = (
+    initial_investment
+    * (1 + comparison_data["Portfolio"]).cumprod()
+)
+
+market_benchmark_growth = (
+    initial_investment
+    * (1 + comparison_data["Market"]).cumprod()
+)
+# Draw comparison chart 
+plt.figure(figsize=(12, 6))
+
+plt.plot(
+    portfolio_benchmark_growth,
+    label="Equal-Weight Portfolio"
+)
+
+plt.plot(
+    market_benchmark_growth,
+    label="S&P 500"
+)
+
+plt.title("Growth of $10,000: Portfolio vs. S&P 500")
+plt.xlabel("Date")
+plt.ylabel("Portfolio Value ($)")
+plt.legend()
+plt.grid(alpha=0.3)
+plt.tight_layout()
+
+plt.savefig(
+    "images/portfolio_vs_sp500.png",
+    dpi=300
+)
+
+plt.show()
