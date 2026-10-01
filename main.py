@@ -178,3 +178,10 @@ print("\nPortfolio Summary:")
 print(f"Annualized Return: {portfolio_return:.2%}")
 print(f"Annualized Volatility: {portfolio_volatility:.2%}")
 print(f"Sharpe Ratio: {portfolio_sharpe:.2f}")
+
+# Calculate the portfolio's daily returns
+# It can be calculated by the sum of daily return of each stocks multiply with weight of each 
+portfolio_daily_returns = daily_returns @ weights # @ performs matrix multiplication.
+
+print("\nPortfolio Daily Returns:")
+print(portfolio_daily_returns.tail())
