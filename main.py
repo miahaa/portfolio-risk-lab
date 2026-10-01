@@ -363,6 +363,6 @@ capm_expected_return = (
 print(f"CAPM Expected Return: {capm_expected_return:.2%}")
 
 # Calculate Jensen's Alpha: the difference between portfolio annualized return and CAPM expected return
-portfolio_alpha = portfolio_annual_return - capm_expected_return
+portfolio_alpha = portfolio_return - capm_expected_return
 
 print(f"Jensen's Alpha: {portfolio_alpha:.2%}")
