@@ -348,3 +348,21 @@ market_variance = comparison_data["Market"].var()
 portfolio_beta = covariance_with_market / market_variance
 
 print(f"\nPortfolio Beta: {portfolio_beta:.2f}")
+
+
+'''
+Given that my portfolio took more systematic market risk, how much return should I have expected?
+CAPM Expected Return (Capital Asset Pricing Model) can be calculated: risk_free_rate + beta * (market_return - risk_free_rate)
+'''
+# CAPM expected return
+capm_expected_return = (
+    risk_free_rate
+    + portfolio_beta * (benchmark_annual_return - risk_free_rate)
+)
+
+print(f"CAPM Expected Return: {capm_expected_return:.2%}")
+
+# Calculate Jensen's Alpha: the difference between portfolio annualized return and CAPM expected return
+portfolio_alpha = portfolio_annual_return - capm_expected_return
+
+print(f"Jensen's Alpha: {portfolio_alpha:.2%}")
