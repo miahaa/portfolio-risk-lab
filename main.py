@@ -280,13 +280,40 @@ This is an arithmetic annualized return, not the same thing as CAGR.
 """
 benchmark_annual_return = benchmark_daily_returns["^GSPC"].mean() * 252
 
-print("\nS&P 500 Annualized Return:")
-print(benchmark_annual_return)
+# print("\nS&P 500 Annualized Return:")
+# print(benchmark_annual_return)
+
+# Calculate the S&P 500 volatility from its daily returns
+benchmark_volatility = benchmark_daily_returns["^GSPC"].std() * np.sqrt(252)
+
+print(f"S&P 500 Annualized Volatility: {benchmark_volatility:.2%}")
 
 # Compare portfolio performance against the S&P 500
-excess_return = portfolio_annual_return - benchmark_annual_return
+excess_return = portfolio_return - benchmark_annual_return
 
 print("\nPERFORMANCE VS S&P 500")
-print(f"Portfolio Annualized Return: {portfolio_annual_return:.2%}") # :.2% converts 0.14067 to 14.07%
+print(f"Portfolio Annualized Return: {portfolio_return:.2%}") # :.2% converts 0.14067 to 14.07%
 print(f"S&P 500 Annualized Return: {benchmark_annual_return:.2%}")
 print(f"Excess Return: {excess_return:.2%}")
+
+print("\nRISK VS S&P 500")
+print(f"Portfolio Annualized Volatility: {portfolio_volatility:.2%}")
+print(f"S&P 500 Annualized Volatility: {benchmark_volatility:.2%}")
+
+# Calculate benchmark Sharpe ratio
+benchmark_sharpe = (
+    benchmark_annual_return - risk_free_rate
+) / benchmark_volatility
+
+print(f"S&P 500 Sharpe Ratio: {benchmark_sharpe:.2f}")
+
+"""
+A higher Sharpe ratio means you earned more excess return per unit of risk.
+So if:
+Portfolio Sharpe: 1.10
+S&P 500 Sharpe:   0.65
+portfolio had stronger risk-adjusted performance under this model.
+"""
+print("\nRISK-ADJUSTED PERFORMANCE")
+print(f"Portfolio Sharpe Ratio: {portfolio_sharpe:.2f}")
+print(f"S&P 500 Sharpe Ratio: {benchmark_sharpe:.2f}")
