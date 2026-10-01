@@ -475,6 +475,24 @@ max_sharpe_index = simulation_df["Sharpe"].idxmax()
 
 max_sharpe_portfolio = simulation_df.loc[max_sharpe_index]
 
+min_volatility_index = simulation_df["Volatility"].idxmin()
+
+min_volatility_portfolio = simulation_df.loc[min_volatility_index]
+
+print("\nMINIMUM VOLATILITY PORTFOLIO")
+print(
+    f"Expected Annual Return: "
+    f"{min_volatility_portfolio['Return']:.2%}"
+)
+print(
+    f"Annualized Volatility: "
+    f"{min_volatility_portfolio['Volatility']:.2%}"
+)
+print(
+    f"Sharpe Ratio: "
+    f"{min_volatility_portfolio['Sharpe']:.2f}"
+)
+
 print("\nMAXIMUM SHARPE PORTFOLIO")
 print(
     f"Expected Annual Return: "
@@ -495,6 +513,13 @@ optimal_weights = max_sharpe_portfolio["Weights"]
 for ticker, weight in zip(tickers, optimal_weights):
     print(f"{ticker}: {weight:.2%}")
 
+print("\nMINIMUM VOLATILITY WEIGHTS")
+
+min_volatility_weights = min_volatility_portfolio["Weights"]
+
+for ticker, weight in zip(tickers, min_volatility_weights):
+    print(f"{ticker}: {weight:.2%}")
+
 # Visualize simulated portfolios
 plt.figure(figsize=(10, 6))
 
@@ -513,14 +538,42 @@ plt.colorbar(
 
 plt.xlabel("Annualized Volatility")
 plt.ylabel("Expected Annual Return")
-plt.title("Monte Carlo Portfolio Simulation")
+plt.title("Portfolio Optimization: Risk vs. Return")
 
+# Maximum-Sharpe portfolio
 plt.scatter(
     max_sharpe_portfolio["Volatility"],
     max_sharpe_portfolio["Return"],
     marker="*",
     s=300,
     label="Maximum Sharpe Portfolio"
+)
+
+# Add equal-weight portfolio
+plt.scatter(
+    portfolio_volatility,
+    portfolio_return,
+    marker="o",
+    s=180,
+    label="Equal-Weight Portfolio"
+)
+
+# Add S&P 500 portfolio
+plt.scatter(
+    benchmark_volatility,
+    benchmark_annual_return,
+    marker="X",
+    s=180,
+    label="S&P 500"
+)
+
+# Add Minimum Volatility Portfolio
+plt.scatter(
+    min_volatility_portfolio["Volatility"],
+    min_volatility_portfolio["Return"],
+    marker="D",
+    s=180,
+    label="Minimum Volatility Portfolio"
 )
 
 plt.legend()
