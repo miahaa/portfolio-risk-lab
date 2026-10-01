@@ -419,3 +419,118 @@ print(
     f"${final_portfolio_value - final_market_value:,.2f}"
 )
 
+# --------------------------------------------------
+# PORTFOLIO OPTIMIZATION
+# --------------------------------------------------
+'''
+What combination of these five stocks historically produced the highest Sharpe ratio?
+Goal: We're not simply searching for the portfolio with the highest return. We're searching for the strongest 
+historical risk-adjusted return.
+'''
+num_portfolios = 10000
+
+simulation_results = []
+
+for i in range(num_portfolios):
+
+    # Generate random weights
+    random_weights = np.random.random(len(tickers))
+
+    # Make weights add up to 100%
+    random_weights = random_weights / np.sum(random_weights)
+
+    # Calculate portfolio return
+    simulated_return = np.sum(
+        annual_returns * random_weights
+    )
+
+    # Calculate portfolio volatility
+    simulated_variance = (
+        random_weights.T
+        @ covariance_matrix
+        @ random_weights
+    )
+
+    simulated_volatility = np.sqrt(simulated_variance)
+
+    # Calculate Sharpe ratio
+    simulated_sharpe = (
+        simulated_return - risk_free_rate
+    ) / simulated_volatility
+
+    simulation_results.append(
+        {
+            "Return": simulated_return,
+            "Volatility": simulated_volatility,
+            "Sharpe": simulated_sharpe,
+            "Weights": random_weights
+        }
+    )
+
+# Convert simulation results to a DataFrame
+simulation_df = pd.DataFrame(simulation_results)
+
+# Find portfolio with highest Sharpe ratio
+max_sharpe_index = simulation_df["Sharpe"].idxmax()
+
+max_sharpe_portfolio = simulation_df.loc[max_sharpe_index]
+
+print("\nMAXIMUM SHARPE PORTFOLIO")
+print(
+    f"Expected Annual Return: "
+    f"{max_sharpe_portfolio['Return']:.2%}"
+)
+print(
+    f"Annualized Volatility: "
+    f"{max_sharpe_portfolio['Volatility']:.2%}"
+)
+print(
+    f"Sharpe Ratio: "
+    f"{max_sharpe_portfolio['Sharpe']:.2f}"
+)
+print("\nOPTIMAL WEIGHTS")
+
+optimal_weights = max_sharpe_portfolio["Weights"]
+
+for ticker, weight in zip(tickers, optimal_weights):
+    print(f"{ticker}: {weight:.2%}")
+
+# Visualize simulated portfolios
+plt.figure(figsize=(10, 6))
+
+scatter = plt.scatter(
+    simulation_df["Volatility"],
+    simulation_df["Return"],
+    c=simulation_df["Sharpe"],
+    cmap="viridis",
+    alpha=0.6
+)
+
+plt.colorbar(
+    scatter,
+    label="Sharpe Ratio"
+)
+
+plt.xlabel("Annualized Volatility")
+plt.ylabel("Expected Annual Return")
+plt.title("Monte Carlo Portfolio Simulation")
+
+plt.scatter(
+    max_sharpe_portfolio["Volatility"],
+    max_sharpe_portfolio["Return"],
+    marker="*",
+    s=300,
+    label="Maximum Sharpe Portfolio"
+)
+
+plt.legend()
+plt.grid(alpha=0.3)
+plt.tight_layout()
+
+plt.savefig(
+    "images/portfolio_optimization.png",
+    dpi=300,
+    bbox_inches="tight"
+)
+
+plt.show()
