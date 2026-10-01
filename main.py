@@ -22,8 +22,14 @@ benchmark = yf.download(
 
 benchmark_prices = benchmark["Close"]   # extracts the closing-price series
 
-print("\nS&P 500 Prices:")
-print(benchmark_prices.tail())
+# Calculate daily S&P 500 returns
+benchmark_daily_returns = benchmark_prices.pct_change().dropna() # pct_change() calculates daily return automatically for every trading day.
+
+print("\nS&P 500 Daily Returns:")
+print(benchmark_daily_returns.tail())
+
+# print("\nS&P 500 Prices:")
+# print(benchmark_prices.tail())
 
 # extracts the closing-price data
 prices = data["Close"]
@@ -51,6 +57,17 @@ average_daily_return = daily_returns.mean()
 annual_returns = average_daily_return * 252
 # print("\nAnnualized Returns:")
 # print(annual_returns)
+
+# Calculate annualized S&P 500 return
+"""
+This is an arithmetic annualized return, not the same thing as CAGR.
+- Annualized arithmetic return estimates the average yearly return from daily observations.
+- CAGR measures the compounded growth rate from the beginning to the end.
+"""
+benchmark_annual_return = benchmark_daily_returns.mean() * 252
+
+print("\nS&P 500 Annualized Return:")
+print(benchmark_annual_return)
 
 # VOLATILITY
 # Return tells us how much the investment earned.
