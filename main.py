@@ -1,6 +1,7 @@
 import yfinance as yf # use yfinance to retrieve historical stock data
 import pandas as pd   # table of data 
 import matplotlib.pyplot as plt   
+import numpy as np
 
 tickers = ["AAPL", "MSFT", "JPM", "JNJ", "NVDA"]    # 5 stock companies
 
@@ -66,7 +67,7 @@ running_peak = cumulative_returns.cummax()
 # Drawdown
 drawdown = (cumulative_returns - running_peak) / running_peak
 print("\ndrawdown:")
-print(drawdown)
+# print(drawdown)
 
 # Maximum Drawdown
 max_drawdown = drawdown.min()
@@ -91,32 +92,53 @@ correlation_matrix = daily_returns.corr()  # Correlation func
 print("\nCorrelation matrix:")
 print(correlation_matrix)
 
-# Correlation heatmap
-fig, ax = plt.subplots(figsize=(8, 6))
+# # Correlation heatmap
+# fig, ax = plt.subplots(figsize=(8, 6))
 
-heatmap = ax.imshow(correlation_matrix)
+# heatmap = ax.imshow(correlation_matrix)
 
-ax.set_xticks(range(len(tickers)))
-ax.set_yticks(range(len(tickers)))
+# ax.set_xticks(range(len(tickers)))
+# ax.set_yticks(range(len(tickers)))
 
-ax.set_xticklabels(tickers)
-ax.set_yticklabels(tickers)
+# ax.set_xticklabels(tickers)
+# ax.set_yticklabels(tickers)
 
-plt.title("Stock Return Correlation Matrix")
-plt.colorbar(heatmap)
+# plt.title("Stock Return Correlation Matrix")
+# plt.colorbar(heatmap)
 
-# Label each square, loop through the matrix 
-for i in range(len(tickers)):
-    for j in range(len(tickers)):
-        value = correlation_matrix.iloc[i, j]
+# # Label each square, loop through the matrix 
+# for i in range(len(tickers)):
+#     for j in range(len(tickers)):
+#         value = correlation_matrix.iloc[i, j]
 
-        ax.text(
-            j,
-            i,
-            f"{value:.2f}",       # Display the number using two decimal places.
-            ha="center",
-            va="center"
-        )
+#         ax.text(
+#             j,
+#             i,
+#             f"{value:.2f}",       # Display the number using two decimal places.
+#             ha="center",
+#             va="center"
+#         )
 
-plt.savefig("images/correlation_matrix.png", dpi=300, bbox_inches="tight")
-plt.show()
+# plt.savefig("images/correlation_matrix.png", dpi=300, bbox_inches="tight")
+# plt.show()
+
+
+# PORTFOLIO WEIGHTS
+""" 
+Right now we're analyzing:
+tickers = ["AAPL", "MSFT", "JPM", "JNJ", "NVDA"]
+We'll start with an equal-weight portfolio. With 5 stocks: Weight = 1/5 = 20%
+So each stock gets 20%.
+"""
+num_assets = len(tickers)
+
+weights = np.array([1 / num_assets] * num_assets)
+
+print("\nPortfolio Weights:")
+print(weights)
+
+# The portfolio return is: Rp = w1R1 + w2R2 + ... + wnRn
+portfolio_return = sum(weights * annual_returns)
+print("\nPortfolio Annualized Return:")
+print(portfolio_return)
+print(f"Portfolio Annualized Return: {portfolio_return:.2%}")
