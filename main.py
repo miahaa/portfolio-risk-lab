@@ -47,8 +47,8 @@ daily_volatility = daily_returns.std()
 # Annualize daily volatility
 annual_volatility = daily_volatility * (252 ** 0.5)
 # Print
-print("\nAnnualized Volatility:")
-print(annual_volatility)
+# print("\nAnnualized Volatility:")
+# print(annual_volatility)
 
 # Sharpe ratio
 # How much excess return am I getting for the risk I'm taking?
@@ -134,14 +134,14 @@ num_assets = len(tickers)
 
 weights = np.array([1 / num_assets] * num_assets)
 
-print("\nPortfolio Weights:")
-print(weights)
+# print("\nPortfolio Weights:")
+# print(weights)
 
 # The portfolio return is: Rp = w1R1 + w2R2 + ... + wnRn
 portfolio_return = sum(weights * annual_returns)
-print("\nPortfolio Annualized Return:")
-print(portfolio_return)
-print(f"Portfolio Annualized Return: {portfolio_return:.2%}")
+# print("\nPortfolio Annualized Return:")
+# print(portfolio_return)
+# print(f"Portfolio Annualized Return: {portfolio_return:.2%}")
 
 # Portfolio volatility
 covariance_matrix = daily_returns.cov() * 252
@@ -154,7 +154,7 @@ portfolio_variance = weights.T @ covariance_matrix @ weights
 
 portfolio_volatility = np.sqrt(portfolio_variance)
 
-print(f"\nPortfolio Annualized Volatility: {portfolio_volatility:.2%}")
+# print(f"\nPortfolio Annualized Volatility: {portfolio_volatility:.2%}")
 
 '''
 Portfolio volatility is 20.29%, while the portfolio's expected annualized return is 27.80%.
@@ -183,5 +183,37 @@ print(f"Sharpe Ratio: {portfolio_sharpe:.2f}")
 # It can be calculated by the sum of daily return of each stocks multiply with weight of each 
 portfolio_daily_returns = daily_returns @ weights # @ performs matrix multiplication.
 
-print("\nPortfolio Daily Returns:")
-print(portfolio_daily_returns.tail())
+# print("\nPortfolio Daily Returns:")
+# print(portfolio_daily_returns.tail())
+
+
+# Calculate cumulative portfolio performance
+portfolio_cumulative = (1 + portfolio_daily_returns).cumprod()
+
+# print("\nPortfolio Cumulative Performance:")
+# print(portfolio_cumulative.tail())
+
+# Create a Growth of #10,000 chart 
+initial_investment = 10000
+
+portfolio_value = initial_investment * portfolio_cumulative
+print(f"\nFinal Portfolio Value: ${portfolio_value.iloc[-1]:,.2f}") # :,.2f is to turn something like 25342.827 into 25,342.83
+
+# Create the chart 
+fig, ax = plt.subplots(figsize=(10, 6))
+
+ax.plot(portfolio_value.index, portfolio_value)
+
+ax.set_title("Growth of $10,000 - Equal-Weight Portfolio")
+ax.set_xlabel("Date")
+ax.set_ylabel("Portfolio Value ($)")
+ax.grid(True, alpha=0.3)
+
+plt.tight_layout()
+# plt.savefig("images/correlation_matrix.png", dpi=300, bbox_inches="tight")
+plt.savefig(
+    "images/portfolio_growth.png",
+    dpi=300,
+    bbox_inches="tight"
+)
+plt.show()
